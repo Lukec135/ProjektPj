@@ -1,11 +1,54 @@
 package com.example.projekt
 
+
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.projekt.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding //ADD THIS LINE
+
+    //lateinit var app: MyApplication
+
+    //val btnShowQR = findViewById(R.id.ShowQr) as Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+       // setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater) //ADD THIS LINE
+        setContentView(binding.root)
+
+        var getData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                println("Scan results: ${data?.getStringExtra("SCAN_RESULT")}") // prints www.um.si
+
+                //var podatki = data?.getStringExtra("SCAN_RESULT").toString()
+
+            }
+        }
+
+        binding.ShowQr.setOnClickListener(){
+            //binding.textView.text = "DELUJE"
+            try {
+                val intent = Intent("com.google.zxing.client.android.SCAN")
+                intent.putExtra("SCAN_MODE", "QR_CODE_MODE") // use “PRODUCT_MODE” for barcodes
+                getData.launch(intent)
+            } catch (e: Exception) {
+                val marketUri = Uri.parse("market://details?id=com.google.zxing.client.android")
+                val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
+                startActivity(marketIntent)
+
+            }
+        }
     }
+
 }
