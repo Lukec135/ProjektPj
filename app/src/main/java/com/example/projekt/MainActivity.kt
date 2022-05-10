@@ -17,19 +17,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // setContentView(R.layout.activity_main)
+        // setContentView(R.layout.activity_main)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val getData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
+        val getData =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
 
-               //izpise vsebino qr kode
-                Toast.makeText(applicationContext,"VSEBINA QR KODE: \n${data?.getStringExtra("SCAN_RESULT")}", Toast.LENGTH_SHORT).show()
+                    //izpise vsebino qr kode
+                    Toast.makeText(
+                        applicationContext,
+                        "VSEBINA QR KODE: \n${data?.getStringExtra("SCAN_RESULT")}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-        }
 
         binding.ShowQr.setOnClickListener {
             //binding.textView.text = "DELUJE"
