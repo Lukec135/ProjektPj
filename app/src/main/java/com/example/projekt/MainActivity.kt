@@ -13,26 +13,21 @@ import com.example.projekt.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding //ADD THIS LINE
-
-    //lateinit var app: MyApplication
-
-    //val btnShowQR = findViewById(R.id.ShowQr) as Button
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // setContentView(R.layout.activity_main)
 
-        binding = ActivityMainBinding.inflate(layoutInflater) //ADD THIS LINE
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val getData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
+
                //izpise vsebino qr kode
                 Toast.makeText(applicationContext,"VSEBINA QR KODE: \n${data?.getStringExtra("SCAN_RESULT")}", Toast.LENGTH_SHORT).show()
-                //var podatki = data?.getStringExtra("SCAN_RESULT").toString()
-
             }
         }
 
@@ -40,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             //binding.textView.text = "DELUJE"
             try {
                 val intent = Intent("com.google.zxing.client.android.SCAN")
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE") // use “PRODUCT_MODE” for barcodes
+                intent.putExtra("SCAN_MODE", "QR_CODE_MODE")
                 getData.launch(intent)
             } catch (e: Exception) {
                 val marketUri = Uri.parse("market://details?id=com.google.zxing.client.android")
