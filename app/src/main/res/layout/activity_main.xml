@@ -35,4 +35,24 @@
         app:srcCompat="@drawable/pametni_paketnik"
         tools:ignore="ImageContrastCheck" />
 
+    <Button
+        android:id="@+id/test123"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ShowQr" />
+
+    <TextView
+        android:id="@+id/Testizpis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="aBc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test123" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
