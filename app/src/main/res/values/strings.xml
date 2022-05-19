@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pametni paketnik</string>
+    <string name="odpri_paketnik">Odpri paketnik</string>
+    <string name="slika_paketnika">Slika paketnika</string>
 </resources>
