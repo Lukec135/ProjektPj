@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fileWav: File
     private lateinit var binding: ActivityMainBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // setContentView(R.layout.activity_main)
@@ -57,7 +58,8 @@ class MainActivity : AppCompatActivity() {
                 if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
 
-                    idPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
+                   var resultIdPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
+                    idPaketnika= resultIdPaketnika[6].toString()+resultIdPaketnika[7].toString()+resultIdPaketnika[8].toString()
 
                     //izpise vsebino qr kode
                     Toast.makeText(
