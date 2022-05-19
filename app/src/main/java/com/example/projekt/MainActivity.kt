@@ -3,6 +3,8 @@ package com.example.projekt
 
 
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,13 +26,17 @@ import java.util.zip.ZipFile
 
 const val MY_FILE_NAME = "mydata.txt"
 const val TESTFORZIP = "token.zip"
+const val TESTFORWAV = "token.wav"
+
 
 private const val BUFFER_SIZE = 4096
+var idPaketnika:String = "";
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var file: File
     private lateinit var file123: File
+    private lateinit var fileWav: File
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,21 +45,31 @@ class MainActivity : AppCompatActivity() {
 
         file = File(filesDir, MY_FILE_NAME)
         file123 = File(filesDir, TESTFORZIP)
+        fileWav = File(filesDir, TESTFORWAV)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         val getData =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
 
+                    idPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
+
                     //izpise vsebino qr kode
                     Toast.makeText(
                         applicationContext,
-                        "VSEBINA QR KODE: \n${data?.getStringExtra("SCAN_RESULT")}",
+                        "VSEBINA QR KODE: \n${idPaketnika}",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    post("https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox","{\n" +
+                            "\"boxId\": ${idPaketnika},\n" +
+                            "\"tokenFormat\": 2\n" +
+                            "}")
                 }
             }
 
@@ -71,12 +87,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.test123.setOnClickListener{
-            post("https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox","{\n" +
-                    "\"boxId\": 352,\n" +
-                    "\"tokenFormat\": 2\n" +
-                    "}")
-        }
 
 
     }
@@ -156,26 +166,25 @@ class MainActivity : AppCompatActivity() {
                     generateZip(tokenInBase64)
 
                     val zipFileName = filesDir.absolutePath + "/token.zip";
+                    //val zipFileName = filesDir.absolutePath + "/token.zip";
 
-                    /*
-                    ZipFile(zipFileName).use { zip ->
-                        zip.entries().asSequence().forEach { entry ->
-                            zip.getInputStream(entry).use { input ->
-                                File(entry.name).outputStream().use { output ->
-                                    input.copyTo(output)
-                                }
-                            }
-                        }
+
+                    unzip(file123,filesDir.absolutePath)        //dobimo token.wav
+
+
+
+                    val myUri: Uri = Uri.fromFile(fileWav) // initialize Uri here
+                    val mediaPlayer = MediaPlayer().apply {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
+                        setDataSource(applicationContext, myUri)
+                        prepare()
+                        start()
                     }
-*/
-
-                   // unzip(file123,file123.absolutePath)
-
-                    //file123.writeBytes(tokenInByteArray)
-                    //zipBytes(file123.name,tokenInByteArray)
-                    //File("testniStringZipan").writeText(tokenDecoded)
-                    //decoder(tokenInBase64,"FIleZaUporabo.zip")
-
 
                     println("TEST2")
                 }
@@ -193,12 +202,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    ///TO POMOJEM NE DELUJE
     fun unzip(zipFilePath: File, destDirectory: String) {
 
         val destDir =  File(destDirectory).run {
             if (!exists()) {
                 mkdirs()
+                println("NAPAKA V DIREKTORIJU...")
             }
         }
 
@@ -214,10 +223,12 @@ class MainActivity : AppCompatActivity() {
                     if (!entry.isDirectory) {
                         // if the entry is a file, extracts it
                         extractFile(input, filePath)
+                        println("EXTRAKTAM...")
                     } else {
                         // if the entry is a directory, make the directory
                         val dir = File(filePath)
                         dir.mkdir()
+                        println("DELAM DIREKTORIJ...")
                     }
 
                 }
