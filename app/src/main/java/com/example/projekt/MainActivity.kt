@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
                 if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
 
-                   var resultIdPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
-                    idPaketnika= resultIdPaketnika[6].toString()+resultIdPaketnika[7].toString()+resultIdPaketnika[8].toString()
+                    var resultIdPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
+                    idPaketnika = resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
 
                     //izpise vsebino qr kode
                     Toast.makeText(
