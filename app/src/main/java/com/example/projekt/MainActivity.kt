@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fileWav: File
     private lateinit var binding: ActivityMainBinding
 
+    private var imaDostop: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,8 +90,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
-
 
     }
 
@@ -249,6 +249,110 @@ class MainActivity : AppCompatActivity() {
         }
         bos.close()
     }
+
+    @Throws(IOException::class)
+    fun postPolnPrazn(url: String, json: String) {
+        val body: RequestBody = create(JSON, json)
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("NAPAKA")
+                e.printStackTrace()
+                println("Konec Erorja")
+            }
+
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        println("NAPAKA2")
+                        throw IOException("Unexpected code $response")
+                    }
+                    println("PRED KONZOLO")
+                    for ((name, value) in response.headers) {
+                        println("|$name|: |$value|")
+                    }
+
+                    //println(response.body!!.string())
+
+                    //var respondeBody = JSONObject(Objects.requireNonNull(response.body).toString())       //NESMES 2x izpisat bodyja
+                    var respondeBody = JSONObject(response.body!!.string())
+
+                    println("SPREMEMBA:"+ respondeBody.getString("info"))
+
+                    println("TEST1")
+                }
+            }
+        })
+
+    }
+
+    fun PolnPrazenAPI(paketnikID:String){
+        postPolnPrazn("https://silent-eye-350012.oa.r.appspot.com/paketnik/spremeniPolnPrazenAPI","{\n" +
+                "\"paketnikId\": \"${paketnikID}\"\n" +
+                "}")
+    }
+
+    fun postOdkleni(url: String, json: String) {
+        val body: RequestBody = create(JSON, json)
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("NAPAKA")
+                e.printStackTrace()
+                println("Konec Erorja")
+            }
+
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        println("NAPAKA2")
+                        throw IOException("Unexpected code $response")
+                    }
+                    println("PRED KONZOLO")
+                    for ((name, value) in response.headers) {
+                        println("|$name|: |$value|")
+                    }
+
+                    //println(response.body!!.string())
+
+                    //var respondeBody = JSONObject(Objects.requireNonNull(response.body).toString())       //NESMES 2x izpisat bodyja
+                    var respondeBody = JSONObject(response.body!!.string())
+
+                    val odgovor = respondeBody.getString("message")
+
+                    println("USPELO:"+ odgovor)
+
+                    if(odgovor == "true"){
+                        imaDostop = true
+                    }
+
+                    println("KONEC ODKLENJENJA")
+                }
+            }
+        })
+    }
+
+
+    fun callOdkleniAPI(paketnikID:String){
+        postOdkleni("https://silent-eye-350012.oa.r.appspot.com/paketnik/odklepAPI","{\n" +
+                "\"paketnikId\": \"${paketnikID}\",\n" +
+                "\"_id\": \"${USERID}\"\n" +
+                "}")
+    }
+
+
 
 }
 
