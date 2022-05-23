@@ -11,7 +11,11 @@ import android.widget.TextView
 
 object LoadingScreen {
     var dialog: Dialog? = null //obj
-    fun displayLoadingWithText(context: Context?, text: String?, cancelable: Boolean) { // function -- context(parent (reference))
+    fun displayLoadingWithText(
+        context: Context?,
+        text: String?,
+        cancelable: Boolean
+    ) { // function -- context(parent (reference))
         dialog = Dialog(context!!)
         dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog!!.setContentView(R.layout.layout_loading_screen)

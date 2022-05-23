@@ -16,11 +16,11 @@ import org.json.JSONObject
 import java.io.IOException
 import kotlin.concurrent.thread
 
-var USERID:String = ""  //Globalna spremenljivka ki jo lahko uporabljamo v vseh datotekah.
+var USERID: String = ""  //Globalna spremenljivka ki jo lahko uporabljamo v vseh datotekah.
 
 class LoginActivity : AppCompatActivity() {
 
-    private var sporocilo:String = "false"
+    private var sporocilo: String = "false"
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,26 +33,28 @@ class LoginActivity : AppCompatActivity() {
         val username = binding.usernameInput.text
         val password = binding.passwordInput.text
 
-        binding.sendButton.setOnClickListener(){
-            LoadingScreen.displayLoadingWithText(this,"Prijavljanje...",false)
-            if(!username.isEmpty()||!password.isEmpty()){
-            post("https://silent-eye-350012.oa.r.appspot.com/users/loginAPI","{\n" +
-                    "\"username\": \"${username}\",\n" +
-                    "\"password\": \"${password}\"\n" +
-                    "}")
+        binding.sendButton.setOnClickListener() {
+            LoadingScreen.displayLoadingWithText(this, "Prijavljanje...", false)
+            if (!username.isEmpty() || !password.isEmpty()) {
+                post(
+                    "https://silent-eye-350012.oa.r.appspot.com/users/loginAPI", "{\n" +
+                            "\"username\": \"${username}\",\n" +
+                            "\"password\": \"${password}\"\n" +
+                            "}"
+                )
             }
             Thread.sleep(1000)
-            if(sporocilo == "true"){
+            if (sporocilo == "true") {
                 //ODPERI MAIN
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-            }else{
+            } else {
                 binding.EroorMessageView.text = "NAPAČNO UPORABNIŠKO IME ALI GESLO!"
             }
 
-          /*  LoadingScreen.hideLoading()
-            Thread.sleep(3000)
-            LoadingScreen.displayLoadingWithText(this,"Prijavljanje...",false)*/
+            /*  LoadingScreen.hideLoading()
+              Thread.sleep(3000)
+              LoadingScreen.displayLoadingWithText(this,"Prijavljanje...",false)*/
         }
 
     }
@@ -95,12 +97,12 @@ class LoginActivity : AppCompatActivity() {
                     var respondeBody = JSONObject(response.body!!.string())
 
                     sporocilo = respondeBody.getString("message")
-                    if(sporocilo == "true") {
+                    if (sporocilo == "true") {
                         USERID = respondeBody.getString("userId")
                     }
 
-                    println("Dobimo1:"+ sporocilo)
-                    println("Dobimo2:"+ USERID)
+                    println("Dobimo1:" + sporocilo)
+                    println("Dobimo2:" + USERID)
 
                     //val tokenInBase64 = respondeBody.getString("data")
 
