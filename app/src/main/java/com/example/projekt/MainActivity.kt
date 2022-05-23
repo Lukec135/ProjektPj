@@ -1,7 +1,6 @@
 package com.example.projekt
 
 
-
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
@@ -32,8 +31,9 @@ const val TESTFORWAV = "token.wav"
 
 
 private const val BUFFER_SIZE = 4096
-var idPaketnika:String = "";
-var res:String=""
+var idPaketnika: String = "";
+var res: String = ""
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var file: File
@@ -56,14 +56,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
         val getData =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
 
                     var resultIdPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
-                    idPaketnika = resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
+                    idPaketnika =
+                        resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
 
                     //izpise vsebino qr kode
                     Toast.makeText(
@@ -72,10 +72,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    post("https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox","{\n" +
-                            "\"boxId\": ${idPaketnika},\n" +
-                            "\"tokenFormat\": 2\n" +
-                            "}")
+                    post(
+                        "https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox", "{\n" +
+                                "\"boxId\": ${idPaketnika},\n" +
+                                "\"tokenFormat\": 2\n" +
+                                "}"
+                    )
                 }
             }
 
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.showPaketnik.setOnClickListener {
-         val intent = Intent(this, MojPaketnikiActivity::class.java)
+            val intent = Intent(this, MojPaketnikiActivity::class.java)
             startActivity(intent)
         }
         post2(
@@ -101,7 +103,6 @@ class MainActivity : AppCompatActivity() {
                     "\"lastnikId\": \"${USERID}\"\n" +
                     "}"
         )
-
 
 
     }
@@ -112,18 +113,19 @@ class MainActivity : AppCompatActivity() {
     val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
 
     var client = OkHttpClient()
-/*
-    fun saveToFile(data:String) {
-        try {
-            //for FileUtils import org.apache.commons.io.FileUtils
-            //in gradle implementation 'org.apache.commons:commons-io:1.3.2'
-            FileUtils.writeStringToFile(file, data)
-        } catch (e: IOException) {
-            println("SAVE TO FILE: Can't save " + file.path)
-        }
-    }
 
-    */
+    /*
+        fun saveToFile(data:String) {
+            try {
+                //for FileUtils import org.apache.commons.io.FileUtils
+                //in gradle implementation 'org.apache.commons:commons-io:1.3.2'
+                FileUtils.writeStringToFile(file, data)
+            } catch (e: IOException) {
+                println("SAVE TO FILE: Can't save " + file.path)
+            }
+        }
+
+        */
     @Throws(IOException::class)
     fun post(url: String, json: String) {
         val body: RequestBody = create(JSON, json)
@@ -184,8 +186,7 @@ class MainActivity : AppCompatActivity() {
                     //val zipFileName = filesDir.absolutePath + "/token.zip";
 
 
-                    unzip(file123,filesDir.absolutePath)        //dobimo token.wav
-
+                    unzip(file123, filesDir.absolutePath)        //dobimo token.wav
 
 
                     val myUri: Uri = Uri.fromFile(fileWav) // initialize Uri here
@@ -208,9 +209,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun generateZip(tokenInBase64:String) {
-        val decodedBytes = Base64.decode(tokenInBase64,Base64.NO_WRAP)
-        val fos = FileOutputStream(filesDir.absolutePath+"/token.zip")
+    private fun generateZip(tokenInBase64: String) {
+        val decodedBytes = Base64.decode(tokenInBase64, Base64.NO_WRAP)
+        val fos = FileOutputStream(filesDir.absolutePath + "/token.zip")
         fos.write(decodedBytes)
         fos.flush()
         fos.close()
@@ -219,7 +220,7 @@ class MainActivity : AppCompatActivity() {
 
     fun unzip(zipFilePath: File, destDirectory: String) {
 
-        val destDir =  File(destDirectory).run {
+        val destDir = File(destDirectory).run {
             if (!exists()) {
                 mkdirs()
                 println("NAPAKA V DIREKTORIJU...")
@@ -296,7 +297,7 @@ class MainActivity : AppCompatActivity() {
                     //var respondeBody = JSONObject(Objects.requireNonNull(response.body).toString())       //NESMES 2x izpisat bodyja
                     var respondeBody = JSONObject(response.body!!.string())
 
-                    println("SPREMEMBA:"+ respondeBody.getString("info"))
+                    println("SPREMEMBA:" + respondeBody.getString("info"))
 
                     println("TEST1")
                 }
@@ -305,10 +306,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun PolnPrazenAPI(paketnikID:String){
-        postPolnPrazn("https://silent-eye-350012.oa.r.appspot.com/paketnik/spremeniPolnPrazenAPI","{\n" +
-                "\"paketnikId\": \"${paketnikID}\"\n" +
-                "}")
+    fun PolnPrazenAPI(paketnikID: String) {
+        postPolnPrazn(
+            "https://silent-eye-350012.oa.r.appspot.com/paketnik/spremeniPolnPrazenAPI", "{\n" +
+                    "\"paketnikId\": \"${paketnikID}\"\n" +
+                    "}"
+        )
     }
 
     fun postOdkleni(url: String, json: String) {
@@ -345,9 +348,9 @@ class MainActivity : AppCompatActivity() {
 
                     val odgovor = respondeBody.getString("message")
 
-                    println("USPELO:"+ odgovor)
+                    println("USPELO:" + odgovor)
 
-                    if(odgovor == "true"){
+                    if (odgovor == "true") {
                         imaDostop = true
                     }
 
@@ -358,11 +361,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun callOdkleniAPI(paketnikID:String){
-        postOdkleni("https://silent-eye-350012.oa.r.appspot.com/paketnik/odklepAPI","{\n" +
-                "\"paketnikId\": \"${paketnikID}\",\n" +
-                "\"_id\": \"${USERID}\"\n" +
-                "}")
+    fun callOdkleniAPI(paketnikID: String) {
+        postOdkleni(
+            "https://silent-eye-350012.oa.r.appspot.com/paketnik/odklepAPI", "{\n" +
+                    "\"paketnikId\": \"${paketnikID}\",\n" +
+                    "\"_id\": \"${USERID}\"\n" +
+                    "}"
+        )
     }
 
 
