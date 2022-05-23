@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.sendButton.setOnClickListener(){
+            if(!username.isEmpty()||!password.isEmpty()){
             post("https://silent-eye-350012.oa.r.appspot.com/users/loginAPI","{\n" +
                     "\"username\": \"${username}\",\n" +
                     "\"password\": \"${password}\"\n" +
@@ -48,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.EroorMessageView.text = "NAPAČNO UPORABNIŠKO IME ALI GESLO!"
             }
 
-        }
+        }}
     }
 
 
@@ -89,8 +90,9 @@ class LoginActivity : AppCompatActivity() {
                     var respondeBody = JSONObject(response.body!!.string())
 
                     sporocilo = respondeBody.getString("message")
-                    USERID = respondeBody.getString("userId")
-
+                    if(sporocilo == "true") {
+                        USERID = respondeBody.getString("userId")
+                    }
 
                     println("Dobimo1:"+ sporocilo)
                     println("Dobimo2:"+ USERID)

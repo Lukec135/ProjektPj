@@ -22,6 +22,21 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.161" />
 
+    <Button
+        android:id="@+id/showPaketnik"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/paketniki"
+        android:textSize="16sp"
+        app:backgroundTint="#215BC1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.288" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="150dp"

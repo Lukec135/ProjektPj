@@ -90,6 +90,13 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+        binding.showPaketnik.setOnClickListener {
+         val intent = Intent(this, MojPaketnikiActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
 
     }
 
