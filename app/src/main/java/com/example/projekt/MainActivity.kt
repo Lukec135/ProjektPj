@@ -18,8 +18,10 @@ import com.example.projekt.databinding.ActivityMainBinding
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.create
+import org.json.JSONArray
 
 import org.json.JSONObject
+import org.json.JSONTokener
 import java.io.*
 import java.util.zip.ZipFile
 
@@ -31,7 +33,7 @@ const val TESTFORWAV = "token.wav"
 
 private const val BUFFER_SIZE = 4096
 var idPaketnika:String = "";
-
+var res:String=""
 class MainActivity : AppCompatActivity() {
 
     private lateinit var file: File
@@ -90,6 +92,17 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+        binding.showPaketnik.setOnClickListener {
+         val intent = Intent(this, MojPaketnikiActivity::class.java)
+            startActivity(intent)
+        }
+        post2(
+            "https://silent-eye-350012.oa.r.appspot.com/paketnik/listAPI", "{\n" +
+                    "\"lastnikId\": \"${USERID}\"\n" +
+                    "}"
+        )
+
+
 
     }
 
@@ -353,6 +366,38 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    val JSON2: MediaType = "application/json; charset=utf-8".toMediaType()
+    var client2 = OkHttpClient()
+
+    @Throws(IOException::class)
+    fun post2(url: String, json: String) {
+        val body: RequestBody = RequestBody.create(JSON2, json)
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        client2.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        throw IOException("Unexpected code $response")
+                    }
+
+                    res = response.body!!.string()
+                    res = res.replace("\\", "")
+                    res = res.substring(1, res.length - 1)
+                }
+            }
+        })
+
+    }
 
 }
 
