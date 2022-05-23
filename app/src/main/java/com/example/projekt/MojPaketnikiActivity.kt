@@ -19,7 +19,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 import java.io.IOException
-lateinit var recyclerview:RecyclerView
+
+lateinit var recyclerview: RecyclerView
+
 class MojPaketnikiActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMojPaketnikiBinding
@@ -56,8 +58,6 @@ class MojPaketnikiActivity : AppCompatActivity() {
         val adapter = CustomAdapter(data)
 
         recyclerview.adapter = adapter
-
-
 
     }
 
