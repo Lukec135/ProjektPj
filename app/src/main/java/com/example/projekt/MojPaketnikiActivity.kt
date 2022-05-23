@@ -7,16 +7,19 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.projekt.databinding.ActivityMojPaketnikiBinding
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONTokener
 import java.io.IOException
-import org.json.JSONException
-
-
+lateinit var recyclerview:RecyclerView
 class MojPaketnikiActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMojPaketnikiBinding
@@ -27,78 +30,36 @@ class MojPaketnikiActivity : AppCompatActivity() {
         binding = ActivityMojPaketnikiBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //USERID id od userja
-        Toast.makeText(
-            applicationContext,
-            "ID: \n${USERID}",
-            Toast.LENGTH_SHORT
-        ).show()
 
+        val recyclerview = findViewById<RecyclerView>(R.id.recyclerview)
 
-        binding.button.setOnClickListener() {
-            post(
-                "https://silent-eye-350012.oa.r.appspot.com/paketnik/listAPI", "{\n" +
-                        "\"lastnikId\": \"${USERID}\"\n" +
-                        "}"
-            )
+        recyclerview.layoutManager = LinearLayoutManager(this)
 
+        val data = ArrayList<ItemsViewModel>()
+
+        var jsonArray = JSONTokener(res).nextValue() as JSONArray
+
+        for (i in 0 until jsonArray.length()) {
+            val _id = jsonArray.getJSONObject(i).getString("_id")
+            val naziv = jsonArray.getJSONObject(i).getString("naziv")
+            val poln = jsonArray.getJSONObject(i).getString("poln")
+            println(_id + " " + naziv + " " + poln)
+            val osebeZDostopom = jsonArray.getJSONObject(i).getString("osebeZDostopom")
+            val jsonArray2 = JSONTokener(osebeZDostopom).nextValue() as JSONArray
+            for (i in 0 until jsonArray2.length()) {
+                val osebaUsername = jsonArray2.getJSONObject(i).getString("osebaUsername")
+                println(osebaUsername)
+            }
+            data.add(ItemsViewModel(R.drawable.pametni_paketnik, naziv))
         }
 
+        val adapter = CustomAdapter(data)
+
+        recyclerview.adapter = adapter
+
+
 
     }
 
-    val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
-    var client = OkHttpClient()
-
-    @Throws(IOException::class)
-    fun post(url: String, json: String) {
-        val body: RequestBody = RequestBody.create(JSON, json)
-        val request: Request = Request.Builder()
-            .url(url)
-            .post(body)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
-
-
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onResponse(call: Call, response: Response) {
-                response.use {
-                    if (!response.isSuccessful) {
-                        throw IOException("Unexpected code $response")
-                    }
-
-                    var respondeBody = JSONObject(response.body!!.string())
-
-                    /*USERID = respondeBody.getString("userId")
-                    println("Dobimo2:"+ USERID)*/
-                    println(respondeBody)
-/*
-                    val jsonString = "{\"Employee\":{\"Name\":\"Niyaz\",\"Salary\":56000}}"
-
-
-                        try {
-                            val emp = JSONObject(jsonString).getJSONObject("Employee")
-                            val empName = emp.getString("Name")
-                            val empSalary = emp.getInt("Salary")
-                            val string =
-                                "Employee Name: $empName\nEmployee Salary: $empSalary"
-                            print(string)
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
-                        }
-
-*/
-
-
-                }
-            }
-        })
-
-    }
 }
-
 
