@@ -15,6 +15,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
 import java.io.IOException
 
+var USERID:String = ""  //Globalna spremenljivka ki jo lahko uporabljamo v vseh datotekah.
+
 class LoginActivity : AppCompatActivity() {
 
     private var sporocilo:String = "false"
@@ -87,8 +89,11 @@ class LoginActivity : AppCompatActivity() {
                     var respondeBody = JSONObject(response.body!!.string())
 
                     sporocilo = respondeBody.getString("message")
+                    USERID = respondeBody.getString("userId")
 
-                    println("Dobimo:"+ sporocilo)
+
+                    println("Dobimo1:"+ sporocilo)
+                    println("Dobimo2:"+ USERID)
 
                     //val tokenInBase64 = respondeBody.getString("data")
 
