@@ -42,5 +42,6 @@ class CustomAdapter(private val mList: List<ItemsViewModel>) :
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val textView: TextView = itemView.findViewById(R.id.textView)
+
     }
 }

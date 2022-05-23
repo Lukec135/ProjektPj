@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.passwordInput.text
 
         binding.sendButton.setOnClickListener() {
-            LoadingScreen.displayLoadingWithText(this, "Prijavljanje...", false)
+            LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false)
             if (!username.isEmpty() || !password.isEmpty()) {
                 post(
                     "https://silent-eye-350012.oa.r.appspot.com/users/loginAPI", "{\n" +
