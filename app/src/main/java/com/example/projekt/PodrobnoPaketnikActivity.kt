@@ -30,7 +30,7 @@ class PodrobnoPaketnikActivity : AppCompatActivity() {
                 val naziv = jsonArray.getJSONObject(i).getString("naziv")
                 val poln = jsonArray.getJSONObject(i).getString("poln")
 
-                binding.lastnik.text = "LASTNIK: " + naziv
+                binding.lastnik.text = "IME: " + naziv
                 binding.paketnikID.text = "ID PAKETNIKA: " + _id.replace("0", "")
                 var vrednost: String = ""
                 if (poln == "true") {
