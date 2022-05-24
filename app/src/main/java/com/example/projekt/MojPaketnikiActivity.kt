@@ -21,6 +21,7 @@ import org.json.JSONTokener
 import java.io.IOException
 
 lateinit var recyclerview: RecyclerView
+var IDPAKETNIKA: String = ""
 
 class MojPaketnikiActivity : AppCompatActivity() {
 
@@ -52,12 +53,18 @@ class MojPaketnikiActivity : AppCompatActivity() {
                 val osebaUsername = jsonArray2.getJSONObject(i).getString("osebaUsername")
                 println(osebaUsername)
             }
-            data.add(ItemsViewModel(R.drawable.pametni_paketnik, naziv))
+            data.add(
+                ItemsViewModel(
+                    R.drawable.pametni_paketnik,
+                    naziv + ":" + _id.replace("0", "")
+                )
+            )
         }
 
         val adapter = CustomAdapter(data)
 
         recyclerview.adapter = adapter
+
 
     }
 

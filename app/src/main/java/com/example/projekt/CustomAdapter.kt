@@ -1,11 +1,14 @@
 package com.example.projekt
 
+import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+
 
 class CustomAdapter(private val mList: List<ItemsViewModel>) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -30,6 +33,14 @@ class CustomAdapter(private val mList: List<ItemsViewModel>) :
 
         // sets the text to the textview from our itemHolder class
         holder.textView.text = ItemsViewModel.text
+        //holder.textView.setOnClickListener {(holder.textView.setTextColor(Color.GREEN))}
+
+        holder.imageView.setOnClickListener { v ->
+            idPaketnika = position.toString()
+
+            val intent = Intent(v.context, PodrobnoPaketnikActivity::class.java)
+            v.context.startActivity(intent)
+        }
 
     }
 
@@ -42,6 +53,6 @@ class CustomAdapter(private val mList: List<ItemsViewModel>) :
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val textView: TextView = itemView.findViewById(R.id.textView)
-
     }
+
 }
