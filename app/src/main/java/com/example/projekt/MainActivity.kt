@@ -17,6 +17,7 @@ import com.example.projekt.databinding.ActivityMainBinding
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.create
+import okio.utf8Size
 import org.json.JSONArray
 
 import org.json.JSONObject
@@ -62,22 +63,64 @@ class MainActivity : AppCompatActivity() {
                     val data: Intent? = result.data
 
                     var resultIdPaketnika = "${data?.getStringExtra("SCAN_RESULT")}"
-                    idPaketnika =
-                        resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
 
-                    //izpise vsebino qr kode
+                    println(resultIdPaketnika)
+
+                    var idIzQRKode = resultIdPaketnika[3].toString() + resultIdPaketnika[4].toString() + resultIdPaketnika[5].toString() + resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
+
+
+                    idPaketnika = ""
+
+                    var prvaNeNic = false
+                    for(i in idIzQRKode){
+                        if(i != '0'){
+                            prvaNeNic = true;
+                        }
+                        if (prvaNeNic){
+                            idPaketnika = idPaketnika + i
+                        }
+                    }
+
+
+                    var idPaketnikaZaBazo : String = idPaketnika
+
+                    while (idPaketnikaZaBazo.length < 24){
+                        idPaketnikaZaBazo = '0' + idPaketnikaZaBazo
+                    }
+
+
+
+                        //izpise vsebino qr kode
                     Toast.makeText(
                         applicationContext,
                         "VSEBINA QR KODE: \n${idPaketnika}",
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    post(
-                        "https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox", "{\n" +
-                                "\"boxId\": ${idPaketnika},\n" +
-                                "\"tokenFormat\": 2\n" +
-                                "}"
-                    )
+                    println("--------------TUKAJ SE ZAČNE-------------------")
+
+                    callOdkleniAPI(idPaketnikaZaBazo)
+
+
+                    println("--------------TUKAJ SE KONČA-------------------")
+
+
+
+                    Thread.sleep(1500)
+
+                    if(imaDostop){
+                        callApiOpenBox()
+                    }
+                    else{
+                        Toast.makeText(
+                            applicationContext,
+                            "NIMATE PRAVICE ODPRETI TEGA PAKETNIKA!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+
+
                 }
             }
 
@@ -126,6 +169,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         */
+
+
+    fun callApiOpenBox(){
+        post(
+            "https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox", "{\n" +
+                    "\"boxId\": ${idPaketnika},\n" +
+                    "\"tokenFormat\": 2\n" +
+                    "}"
+        )
+    }
+
     @Throws(IOException::class)
     fun post(url: String, json: String) {
         val body: RequestBody = create(JSON, json)
