@@ -14,6 +14,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projekt.databinding.ActivityMainBinding
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.create
@@ -97,16 +100,15 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    println("--------------TUKAJ SE ZAČNE-------------------")
+
+/*
+                    runBlocking<Unit> {
+                        val one = async { "KODA" }.await()
+                    }
+*/
 
                     callOdkleniAPI(idPaketnikaZaBazo)
-
-
-                    println("--------------TUKAJ SE KONČA-------------------")
-
-
-
-                    Thread.sleep(1500)
+                    Thread.sleep(2500)      //moremo cakati na odziv APIja
 
                     if(imaDostop){
                         callApiOpenBox()
@@ -118,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
+                    imaDostop = false
 
 
 
