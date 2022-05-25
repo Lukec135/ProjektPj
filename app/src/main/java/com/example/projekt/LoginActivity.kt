@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import com.example.projekt.databinding.ActivityLoginBinding
-import com.example.projekt.databinding.ActivityMainBinding
+
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
                             "}"
                 )
             }
-            Thread.sleep(1000)
+            Thread.sleep(1500)
             if (sporocilo == "true") {
                 //ODPERI MAIN
                 val intent = Intent(this, MainActivity::class.java)
