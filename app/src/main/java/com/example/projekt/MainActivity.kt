@@ -69,31 +69,31 @@ class MainActivity : AppCompatActivity() {
 
                     println(resultIdPaketnika)
 
-                    var idIzQRKode = resultIdPaketnika[3].toString() + resultIdPaketnika[4].toString() + resultIdPaketnika[5].toString() + resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
+                    var idIzQRKode =
+                        resultIdPaketnika[3].toString() + resultIdPaketnika[4].toString() + resultIdPaketnika[5].toString() + resultIdPaketnika[6].toString() + resultIdPaketnika[7].toString() + resultIdPaketnika[8].toString()
 
 
                     idPaketnika = ""
 
                     var prvaNeNic = false
-                    for(i in idIzQRKode){
-                        if(i != '0'){
+                    for (i in idIzQRKode) {
+                        if (i != '0') {
                             prvaNeNic = true;
                         }
-                        if (prvaNeNic){
+                        if (prvaNeNic) {
                             idPaketnika = idPaketnika + i
                         }
                     }
 
 
-                    var idPaketnikaZaBazo : String = idPaketnika
+                    var idPaketnikaZaBazo: String = idPaketnika
 
-                    while (idPaketnikaZaBazo.length < 24){
+                    while (idPaketnikaZaBazo.length < 24) {
                         idPaketnikaZaBazo = '0' + idPaketnikaZaBazo
                     }
 
 
-
-                        //izpise vsebino qr kode
+                    //izpise vsebino qr kode
                     Toast.makeText(
                         applicationContext,
                         "VSEBINA QR KODE: \n${idPaketnika}",
@@ -110,10 +110,9 @@ class MainActivity : AppCompatActivity() {
                     callOdkleniAPI(idPaketnikaZaBazo)
                     Thread.sleep(2500)      //moremo cakati na odziv APIja
 
-                    if(imaDostop){
+                    if (imaDostop) {
                         callApiOpenBox()
-                    }
-                    else{
+                    } else {
                         Toast.makeText(
                             applicationContext,
                             "NIMATE PRAVICE ODPRETI TEGA PAKETNIKA!",
@@ -121,7 +120,6 @@ class MainActivity : AppCompatActivity() {
                         ).show()
                     }
                     imaDostop = false
-
 
 
                 }
@@ -174,7 +172,7 @@ class MainActivity : AppCompatActivity() {
         */
 
 
-    fun callApiOpenBox(){
+    fun callApiOpenBox() {
         post(
             "https://api-ms-stage.direct4.me/sandbox/v1/Access/openbox", "{\n" +
                     "\"boxId\": ${idPaketnika},\n" +

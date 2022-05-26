@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
                             "}"
                 )
             }
-            Thread.sleep(1500)
+            Thread.sleep(2000)
             if (sporocilo == "true") {
                 //ODPERI MAIN
                 val intent = Intent(this, MainActivity::class.java)

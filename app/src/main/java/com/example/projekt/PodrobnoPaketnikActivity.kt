@@ -48,7 +48,7 @@ class PodrobnoPaketnikActivity : AppCompatActivity() {
                 var dostop: String = "DOSTOP:\n"
                 for (i in 0 until jsonArray2.length()) {
                     val osebaUsername = jsonArray2.getJSONObject(i).getString("osebaUsername")
-                    dostop += osebaUsername
+                    dostop += "*" + osebaUsername + "\n"
                     println(osebaUsername)
                 }
                 binding.dostop.text = dostop

@@ -20,56 +20,63 @@
 
             <TextView
                 android:id="@+id/paketnikID"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
                 android:text="TextView"
-                android:layout_marginTop="10dp"
-                android:textSize="25dp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:layout_marginLeft="6sp" />
 
             <TextView
                 android:id="@+id/lastnik"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
                 android:text="TextView"
-                android:layout_marginTop="10dp"
-                android:textSize="25dp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:layout_marginLeft="6sp" />
 
             <TextView
                 android:id="@+id/poln"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
                 android:text="TextView"
-                android:layout_marginTop="10dp"
-                android:textSize="25dp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:layout_marginLeft="6sp"
+                android:paddingBottom="8sp" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="3sp"
                 android:background="@color/white" />
 
             <TextView
                 android:id="@+id/dostop"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="20dp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginLeft="6sp"
+                android:paddingBottom="8sp" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="3sp"
                 android:background="@color/white" />
 
             <TextView
                 android:id="@+id/odklepi"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="20dp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginLeft="6sp" />
 
 
         </LinearLayout>
