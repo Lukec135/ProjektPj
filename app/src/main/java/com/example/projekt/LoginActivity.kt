@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
                             "}"
                 )
             }
-            Thread.sleep(2000)
+            Thread.sleep(2500)
             if (sporocilo == "true") {
                 //ODPERI MAIN
                 val intent = Intent(this, MainActivity::class.java)
@@ -51,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 binding.EroorMessageView.text = "NAPAČNO UPORABNIŠKO IME ALI GESLO!"
             }
+            sporocilo = "false"
 
             /*  LoadingScreen.hideLoading()
               Thread.sleep(3000)
