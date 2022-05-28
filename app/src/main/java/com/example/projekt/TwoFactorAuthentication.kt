@@ -114,6 +114,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
             }
 */*/
             ///*
+
             try {
                 val intent = Intent(Intent.ACTION_PICK)         //ODPIRANJE GALERIJE
                 intent.type = "image/*"
