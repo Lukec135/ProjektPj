@@ -1,28 +1,39 @@
 package com.example.projekt
 
 import android.content.Intent
-import android.media.AudioAttributes
-import android.media.MediaPlayer
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.Image
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.projekt.databinding.ActivityLoginBinding
-
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.concurrent.thread
+import java.lang.System.out
+import java.util.*
 
 var USERID: String = ""  //Globalna spremenljivka ki jo lahko uporabljamo v vseh datotekah.
+var USERNAME: String = "null"
 
 class LoginActivity : AppCompatActivity() {
 
     private var sporocilo: String = "false"
     private lateinit var binding: ActivityLoginBinding
 
+    val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
+    var client = OkHttpClient()
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_login)
@@ -33,6 +44,10 @@ class LoginActivity : AppCompatActivity() {
         val username = binding.usernameInput.text
         val password = binding.passwordInput.text
 
+
+
+
+
         binding.sendButton.setOnClickListener() {
             LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false)
             if (!username.isEmpty() || !password.isEmpty()) {
@@ -42,26 +57,25 @@ class LoginActivity : AppCompatActivity() {
                             "\"password\": \"${password}\"\n" +
                             "}"
                 )
+                //println("To je username:"+username)
+                //println("To je username2:"+username.toString())
+                USERNAME = username.toString()
             }
-            Thread.sleep(1500)
+            Thread.sleep(2500)
             if (sporocilo == "true") {
                 //ODPERI MAIN
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, TwoFactorAuthentication::class.java)
                 startActivity(intent)
             } else {
                 binding.EroorMessageView.text = "NAPAČNO UPORABNIŠKO IME ALI GESLO!"
             }
+            sporocilo = "false"
 
             /*  LoadingScreen.hideLoading()
               Thread.sleep(3000)
               LoadingScreen.displayLoadingWithText(this,"Prijavljanje...",false)*/
         }
-
     }
-
-
-    val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
-    var client = OkHttpClient()
 
     @Throws(IOException::class)
     fun post(url: String, json: String) {
