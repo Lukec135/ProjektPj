@@ -16,12 +16,18 @@ import okhttp3.MediaType.Companion.toMediaType
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class TwoFactorAuthentication : AppCompatActivity() {
 
     private lateinit var binding: ActivityTwoFactorAuthenticationBinding
     val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
-    var client = OkHttpClient()
+    val client = OkHttpClient.Builder()
+        .connectTimeout(300, TimeUnit.SECONDS)
+        .writeTimeout(300, TimeUnit.SECONDS)
+        .readTimeout(300, TimeUnit.SECONDS)
+        .build()
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -31,6 +37,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
         binding = ActivityTwoFactorAuthenticationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
 
         val getDataDodajOsebo =
