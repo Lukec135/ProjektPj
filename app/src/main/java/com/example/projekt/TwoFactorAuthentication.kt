@@ -13,6 +13,7 @@ import com.example.projekt.databinding.ActivityLoginBinding
 import com.example.projekt.databinding.ActivityTwoFactorAuthenticationBinding
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
@@ -42,7 +43,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     //println("VRNE:"+slikaBase64)
 
-                    //generateZip(slikaBase64)
+                    generateZip(slikaBase64)
 
 
                     binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
@@ -64,6 +65,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     var slika: Uri = "${data?.data.toString()}".toUri()
 
                     val slikaBase64 = getBase64ForUriAndPossiblyCrash(slika)
+
+                    generateZip(slikaBase64)
 
                     println("VRNE:"+slikaBase64)
 
@@ -100,15 +103,17 @@ class TwoFactorAuthentication : AppCompatActivity() {
         }
 
         binding.posljiPython.setOnClickListener(){
-            try {
+           /*
+           try {
+
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)    //ODPIRANJE KAMERE
                 //intent.type = "image/*"
                 getData.launch(intent)
             } catch (e: Exception) {
                 println("ERROR PRI GUMBU")
             }
-
-            /*
+*/*/
+            ///*
             try {
                 val intent = Intent(Intent.ACTION_PICK)         //ODPIRANJE GALERIJE
                 intent.type = "image/*"
@@ -116,12 +121,19 @@ class TwoFactorAuthentication : AppCompatActivity() {
             } catch (e: Exception) {
                 println("ERROR PRI GUMBU")
             }
-            */*/
+            //*/*/
         }
 
 
     }
 
+    private fun generateZip(tokenInBase64: String) {
+        val decodedBytes = android.util.Base64.decode(tokenInBase64, android.util.Base64.NO_WRAP)
+        val fos = FileOutputStream(filesDir.absolutePath + "/obraz.png")
+        fos.write(decodedBytes)
+        fos.flush()
+        fos.close()
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
