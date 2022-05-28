@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projekt">
         <activity
+            android:name=".TwoFactorAuthentication"
+            android:exported="false" />
+        <activity
             android:name=".PodrobnoPaketnikActivity"
             android:exported="false" />
         <activity
