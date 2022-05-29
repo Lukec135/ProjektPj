@@ -379,7 +379,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 //binding.odgovor.text = "Prislo je do napake"
                 println("NAPAKA")
-                runOnUiThread(Runnable {                                //Kot neki dispatcher
+                runOnUiThread(Runnable {//Kot neki dispatcher
                     binding.odgovor.text = "Prosim, poskusite znova."
                 })
                 e.printStackTrace()
@@ -391,35 +391,42 @@ class TwoFactorAuthentication : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (!response.isSuccessful) {
-                        println("NAPAKA2")
-                        runOnUiThread(Runnable {                                //Kot neki dispatcher
+                        println("NAPAKA ------> response not successful")
+                        runOnUiThread(Runnable {//Kot neki dispatcher
                             binding.odgovor.text = "Prosim, poskusite znova."
                         })
                         throw IOException("Unexpected code $response")
                     }
-                    println("PRED KONZOLO")
+                    println("pred konzolo")
                     for ((name, value) in response.headers) {
                         println("|$name|: |$value|")
                     }
+                    //println("/////RESPONSE-----------------> "+response.body!!.string())
+                    //var respondeBody = JSONObject(response.body!!.string())
+                    var pythonRes = response.body!!.string()
 
-                    var respondeBody = JSONObject(response.body!!.string())
+                    println("/////RESPONSE-----------------> "+pythonRes)
 
-                    println("RESPONSE "+respondeBody)
+                    //val responseIme = respondeBody.getString("ime")
+                    if (pythonRes == "ERROR_no_face_detected") {
+                        runOnUiThread(Runnable {
+                            binding.odgovor.text = "Prosim, poskusite znova."
+                        })
+                        //throw IOException("Unexpected code $response")
+                    }
+                    else{
+                        zaznanoIme =  pythonRes.substring(15, USERNAME.length+15)
+                        println("Vrnjeno ime = $zaznanoIme")
 
-                    val responseIme = respondeBody.getString("ime")
-
-                    zaznanoIme =  responseIme.substring(6, USERNAME.length+6)
-                    println("Vrnjeno ime = "+ zaznanoIme)
 
 
+                        println("Konec")
 
-                    println("Konec")
-
-                    runOnUiThread(Runnable {                                //Kot neki dispatcher
-                        binding.odgovor.text = "Strežnik je končal obdelavo."
-                        binding.GoToMainButton.isEnabled = true
-                    })
-
+                        runOnUiThread(Runnable {                                //Kot neki dispatcher
+                            binding.odgovor.text = "Strežnik je končal obdelavo."
+                            binding.GoToMainButton.isEnabled = true
+                        })
+                    }
                 }
             }
         })
