@@ -1,27 +1,52 @@
 package com.example.projekt
 
+import android.R.attr.bitmap
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64.encodeToString
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import com.example.projekt.databinding.ActivityLoginBinding
 import com.example.projekt.databinding.ActivityTwoFactorAuthenticationBinding
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.internal.wait
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+
+
 
 class TwoFactorAuthentication : AppCompatActivity() {
 
     private lateinit var binding: ActivityTwoFactorAuthenticationBinding
     val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
-    var client = OkHttpClient()
+    val client = OkHttpClient.Builder()
+        .connectTimeout(300, TimeUnit.SECONDS)
+        .writeTimeout(300, TimeUnit.SECONDS)
+        .readTimeout(300, TimeUnit.SECONDS)
+        .build()
+
+    lateinit var currentPhotoPath: String
+    val REQUEST_IMAGE_CAPTURE = 1
+
+    var uriOfImage : Uri = Uri.EMPTY
+
+    var zaznanoIme = "neznan"
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -33,6 +58,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
+
         val getDataDodajOsebo =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
@@ -41,6 +68,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     val slikaBase64 = getBase64ForUriAndPossiblyCrash(slika)
 
+                    println("URI:"+ slika)
+
                     //println("VRNE:"+slikaBase64)
 
                     generateZip(slikaBase64)
@@ -48,13 +77,14 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
 
+                    /*
                     postSlike(
                         "https://silent-eye-350012.oa.r.appspot.com/images/dodajAPI", "{\n" +
                                 "\"ime\": \"${USERNAME}\",\n" +
                                 "\"slika\": \"${slikaBase64}\"\n" +
                                 "}"
                     )
-
+*/
                 }
             }
 
@@ -62,13 +92,28 @@ class TwoFactorAuthentication : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
-                    var slika: Uri = "${data?.data.toString()}".toUri()
 
-                    val slikaBase64 = getBase64ForUriAndPossiblyCrash(slika)
+                    val takenImage =  data?.extras?.get("data") as Bitmap
 
-                    generateZip(slikaBase64)
 
-                    println("VRNE:"+slikaBase64)
+
+                    //https://www.youtube.com/watch?v=DPHkhamDoyc&ab_channel=RahulPandey
+                    // KER JE PRESLABA KVALITETA MORAMO UPORABITI DRUG NACIN
+                    // TAK DA SHRANIMO NA FON IN NATO POSLJEMO
+
+                    val byteArrayOutputStream = ByteArrayOutputStream()
+                    takenImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                    val byteArray = byteArrayOutputStream.toByteArray()
+
+                    val encoded: String =  android.util.Base64.encodeToString(byteArray,  android.util.Base64.DEFAULT)
+
+                    //var slika: Uri = "${data?.data.toString()}".toUri()
+
+                    //val slikaBase64 = getBase64ForUriAndPossiblyCrash(takenImage)
+
+                    generateZip(encoded)
+
+                    println("VRNE:"+encoded)
 
                     //val fileContent: ByteArray = FileUtils.readFileToByteArray(File("media/external/images/media/4091"))
                     //val encodedString: String = Base64.getEncoder().encodeToString(fileContent)
@@ -80,10 +125,11 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
 
+
                     postSlike(
                         "https://helloworld-43fq37x3bq-ew.a.run.app/preveri", "{\n" +
                                 "\"ime\": \"${USERNAME}\",\n" +
-                                "\"slika\": \"${slikaBase64}\"\n" +
+                                "\"slika\": \"${encoded}\"\n" +
                                 "}"
                     )
 
@@ -102,7 +148,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
             }
         }
 
-        binding.posljiPython.setOnClickListener(){
+        binding.OdperiSlikoButton.setOnClickListener(){
            /*
            try {
 
@@ -113,7 +159,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 println("ERROR PRI GUMBU")
             }
 */*/
-            ///*
+            /*
 
             try {
                 val intent = Intent(Intent.ACTION_PICK)         //ODPIRANJE GALERIJE
@@ -122,10 +168,130 @@ class TwoFactorAuthentication : AppCompatActivity() {
             } catch (e: Exception) {
                 println("ERROR PRI GUMBU")
             }
-            //*/*/
+            */*/
+
+
+            uriOfImage = dispatchTakePictureIntent()
+
+            }
+
+        binding.PosljiButton.setOnClickListener(){
+            println("URI: "+uriOfImage)
+
+            val slikaBase64 = getBase64ForUriAndPossiblyCrash(uriOfImage)
+
+            generateZip(slikaBase64)
+
+            binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!\n to lahko traja tudi nekaj minut!"
+
+            postSlikePython(
+                "https://helloworld-43fq37x3bq-ew.a.run.app/preveri", "{\n" +
+                        "\"ime\": \"${USERNAME}\",\n" +
+                        "\"slika\": \"${slikaBase64}\"\n" +
+                        "}"
+            )
+
+            binding.PosljiButton.isEnabled = false
+
+
+
+        }
+
+        binding.GoToMainButton.setOnClickListener(){
+            if(zaznanoIme == USERNAME){
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            else{
+                binding.testniText.text = "Sistem je zaznal napačno osebo!"
+            }
         }
 
 
+
+
+/*
+            binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
+
+
+            postSlike(
+                "https://helloworld-43fq37x3bq-ew.a.run.app/preveri", "{\n" +
+                        "\"ime\": \"${USERNAME}\",\n" +
+                        "\"slika\": \"${slikaBase64}\"\n" +
+                        "}"
+            )
+*/
+
+    }
+
+    @Throws(IOException::class)
+    fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun dispatchTakePictureIntent() : Uri{
+        println("Pride not")
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            println("ENA")
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    println("NAPAKA DSIPATCHER")
+                    null
+                }
+
+                println("PO TRY")
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.example.android.projekt",
+                        it
+                    )
+                    println("DOBIMO URI")
+                    var x = takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    var y = startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+
+                    binding.PosljiButton.isEnabled = true
+
+                    return photoURI
+                    //Thread.sleep(25000) //pocakamo da uporabnik nalozi sliko
+/*
+                    println("URI: "+photoURI)
+
+                    val slikaBase64 = getBase64ForUriAndPossiblyCrash(photoURI)
+
+                    generateZip(slikaBase64)
+
+                    binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
+
+
+                    postSlike(
+                        "https://helloworld-43fq37x3bq-ew.a.run.app/preveri", "{\n" +
+                                "\"ime\": \"${USERNAME}\",\n" +
+                                "\"slika\": \"${slikaBase64}\"\n" +
+                                "}"
+                    )
+
+ */
+                }
+            }
+        }
+        return Uri.EMPTY
     }
 
     private fun generateZip(tokenInBase64: String) {
@@ -199,8 +365,64 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    @Throws(IOException::class)
+    fun postSlikePython(url: String, json: String) {
+        val body: RequestBody = RequestBody.create(JSON, json)
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                //binding.odgovor.text = "Prislo je do napake"
+                println("NAPAKA")
+                runOnUiThread(Runnable {                                //Kot neki dispatcher
+                    binding.odgovor.text = "Prislo je do napake"
+                })
+                e.printStackTrace()
+                println("Konec Erorja")
+            }
 
 
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        println("NAPAKA2")
+                        runOnUiThread(Runnable {                                //Kot neki dispatcher
+                            binding.odgovor.text = "Prislo je do napake"
+                        })
+                        throw IOException("Unexpected code $response")
+                    }
+                    println("PRED KONZOLO")
+                    for ((name, value) in response.headers) {
+                        println("|$name|: |$value|")
+                    }
+
+                    var respondeBody = JSONObject(response.body!!.string())
+
+                    println("RESPONSE "+respondeBody)
+
+                    val responseIme = respondeBody.getString("ime")
+
+                    zaznanoIme =  responseIme.substring(6, USERNAME.length+6)
+                    println("Vrnjeno ime = "+ zaznanoIme)
+
+
+
+                    println("Konec")
+
+                    runOnUiThread(Runnable {                                //Kot neki dispatcher
+                        binding.odgovor.text = "Server je zaključil delo"
+                        binding.GoToMainButton.isEnabled = true
+                    })
+
+                }
+            }
+        })
     }
 
 

@@ -16,10 +16,10 @@
         app:layout_constraintTop_toBottomOf="@+id/sendButton" />
 
     <Button
-        android:id="@+id/posljiPython"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="poslji sliko ce si to res ti (galerija)"
+        android:id="@+id/OdperiSlikoButton"
+        android:layout_width="199dp"
+        android:layout_height="52dp"
+        android:text="Odperi Kamero"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,6 @@
         android:id="@+id/testniText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,5 +40,25 @@
         app:layout_constraintBottom_toTopOf="@+id/dodajOseboButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/posljiPython" />
+        app:layout_constraintTop_toBottomOf="@+id/GoToMainButton" />
+
+    <Button
+        android:id="@+id/PosljiButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:enabled="false"
+        android:text="Poslji narejeno sliko"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/OdperiSlikoButton" />
+
+    <Button
+        android:id="@+id/GoToMainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:enabled="false"
+        android:text="Vstopi V sistem ko server zaključi delo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PosljiButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
