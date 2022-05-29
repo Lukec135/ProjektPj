@@ -75,7 +75,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     generateZip(slikaBase64)
 
 
-                    binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
+                    binding.odgovor.text = "Prosim, počakajte na odgovor strežnika."
 
                     /*
                     postSlike(
@@ -123,7 +123,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     //generateZip(slikaBase64)
 
-                    binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!"
+                    binding.odgovor.text = "Prosim, počakajte na odgovor strežnika."
 
 
                     postSlike(
@@ -182,7 +182,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
             generateZip(slikaBase64)
 
-            binding.odgovor.text = "Prosim pocakajte na server da obdela vaso zahtevo!\n to lahko traja tudi nekaj minut!"
+            binding.odgovor.text = "Prosim, počakajte na odgovor strežnika."
 
             postSlikePython(
                 "https://helloworld-43fq37x3bq-ew.a.run.app/preveri", "{\n" +
@@ -330,7 +330,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 //binding.odgovor.text = "Prislo je do napake"
                 println("NAPAKA")
                 runOnUiThread(Runnable {                                //Kot neki dispatcher
-                    binding.odgovor.text = "Prislo je do napake"
+                    binding.odgovor.text = "Prosim, poskusite znova."
                 })
                 e.printStackTrace()
                 println("Konec Erorja")
@@ -343,7 +343,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     if (!response.isSuccessful) {
                         println("NAPAKA2")
                         runOnUiThread(Runnable {                                //Kot neki dispatcher
-                            binding.odgovor.text = "Prislo je do napake"
+                            binding.odgovor.text = "Prosim, poskusite znova."
                         })
                         throw IOException("Unexpected code $response")
                     }
@@ -359,7 +359,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     println("Konec")
 
                     runOnUiThread(Runnable {                                //Kot neki dispatcher
-                        binding.odgovor.text = "Server je zaključil delo"
+                        binding.odgovor.text = "Strežnik je končal obdelavo."
                     })
 
                 }
@@ -380,7 +380,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 //binding.odgovor.text = "Prislo je do napake"
                 println("NAPAKA")
                 runOnUiThread(Runnable {                                //Kot neki dispatcher
-                    binding.odgovor.text = "Prislo je do napake"
+                    binding.odgovor.text = "Prosim, poskusite znova."
                 })
                 e.printStackTrace()
                 println("Konec Erorja")
@@ -393,7 +393,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     if (!response.isSuccessful) {
                         println("NAPAKA2")
                         runOnUiThread(Runnable {                                //Kot neki dispatcher
-                            binding.odgovor.text = "Prislo je do napake"
+                            binding.odgovor.text = "Prosim, poskusite znova."
                         })
                         throw IOException("Unexpected code $response")
                     }
@@ -416,7 +416,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     println("Konec")
 
                     runOnUiThread(Runnable {                                //Kot neki dispatcher
-                        binding.odgovor.text = "Server je zaključil delo"
+                        binding.odgovor.text = "Strežnik je končal obdelavo."
                         binding.GoToMainButton.isEnabled = true
                     })
 

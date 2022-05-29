@@ -4,61 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#292929"
     tools:context=".TwoFactorAuthentication">
 
     <Button
         android:id="@+id/dodajOseboButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DodajSliko"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendButton" />
-
-    <Button
-        android:id="@+id/OdperiSlikoButton"
-        android:layout_width="199dp"
-        android:layout_height="52dp"
-        android:text="Odperi Kamero"
+        android:backgroundTint="#00afc3"
+        android:text="Dodaj Sliko"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/odgovor" />
+
+    <Button
+        android:id="@+id/OdperiSlikoButton"
+        android:layout_width="340dp"
+        android:layout_height="52dp"
+        android:backgroundTint="#00afc3"
+        android:text="1. Odpri Kamero"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testniText" />
 
     <TextView
         android:id="@+id/testniText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/odgovor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/dodajOseboButton"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/GoToMainButton" />
 
     <Button
         android:id="@+id/PosljiButton"
-        android:layout_width="wrap_content"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
+        android:backgroundTint="#028695"
         android:enabled="false"
-        android:text="Poslji narejeno sliko"
+        android:text="2. Pošlji narejeno sliko"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/OdperiSlikoButton" />
 
     <Button
         android:id="@+id/GoToMainButton"
+        android:layout_width="340dp"
+        android:layout_height="63dp"
+        android:backgroundTint="#025E68"
+        android:enabled="false"
+        android:text="3. Vstopi v sistem (prejet odgovor)"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PosljiButton" />
+
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
-        android:enabled="false"
-        android:text="Vstopi V sistem ko server zaključi delo"
+        android:layout_marginTop="16dp"
+        android:text="Avtentikacija"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PosljiButton" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
