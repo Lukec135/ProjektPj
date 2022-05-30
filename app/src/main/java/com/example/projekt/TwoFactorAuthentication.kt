@@ -29,7 +29,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-
 class TwoFactorAuthentication : AppCompatActivity() {
 
     private lateinit var binding: ActivityTwoFactorAuthenticationBinding
@@ -43,10 +42,9 @@ class TwoFactorAuthentication : AppCompatActivity() {
     lateinit var currentPhotoPath: String
     val REQUEST_IMAGE_CAPTURE = 1
 
-    var uriOfImage : Uri = Uri.EMPTY
+    var uriOfImage: Uri = Uri.EMPTY
 
     var zaznanoIme = "neznan"
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -58,8 +56,6 @@ class TwoFactorAuthentication : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
-
         val getDataDodajOsebo =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
@@ -68,7 +64,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     val slikaBase64 = getBase64ForUriAndPossiblyCrash(slika)
 
-                    println("URI:"+ slika)
+                    println("URI:" + slika)
 
                     //println("VRNE:"+slikaBase64)
 
@@ -93,8 +89,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 if (result.resultCode == RESULT_OK) {
                     val data: Intent? = result.data
 
-                    val takenImage =  data?.extras?.get("data") as Bitmap
-
+                    val takenImage = data?.extras?.get("data") as Bitmap
 
 
                     //https://www.youtube.com/watch?v=DPHkhamDoyc&ab_channel=RahulPandey
@@ -105,7 +100,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     takenImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
                     val byteArray = byteArrayOutputStream.toByteArray()
 
-                    val encoded: String =  android.util.Base64.encodeToString(byteArray,  android.util.Base64.DEFAULT)
+                    val encoded: String =
+                        android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT)
 
                     //var slika: Uri = "${data?.data.toString()}".toUri()
 
@@ -113,7 +109,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     generateZip(encoded)
 
-                    println("VRNE:"+encoded)
+                    println("VRNE:" + encoded)
 
                     //val fileContent: ByteArray = FileUtils.readFileToByteArray(File("media/external/images/media/4091"))
                     //val encodedString: String = Base64.getEncoder().encodeToString(fileContent)
@@ -138,7 +134,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
         //binding.testniText.text = "TO JE IME"+USERNAME+",\n"+ USERID
 
-        binding.dodajOseboButton.setOnClickListener(){
+        binding.dodajOseboButton.setOnClickListener() {
             try {
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = "image/*"
@@ -148,17 +144,17 @@ class TwoFactorAuthentication : AppCompatActivity() {
             }
         }
 
-        binding.OdperiSlikoButton.setOnClickListener(){
-           /*
-           try {
+        binding.OdperiSlikoButton.setOnClickListener() {
+            /*
+            try {
 
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)    //ODPIRANJE KAMERE
-                //intent.type = "image/*"
-                getData.launch(intent)
-            } catch (e: Exception) {
-                println("ERROR PRI GUMBU")
-            }
-*/*/
+                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)    //ODPIRANJE KAMERE
+                 //intent.type = "image/*"
+                 getData.launch(intent)
+             } catch (e: Exception) {
+                 println("ERROR PRI GUMBU")
+             }
+ */*/
             /*
 
             try {
@@ -173,10 +169,10 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
             uriOfImage = dispatchTakePictureIntent()
 
-            }
+        }
 
-        binding.PosljiButton.setOnClickListener(){
-            println("URI: "+uriOfImage)
+        binding.PosljiButton.setOnClickListener() {
+            println("URI: " + uriOfImage)
 
             val slikaBase64 = getBase64ForUriAndPossiblyCrash(uriOfImage)
 
@@ -194,20 +190,16 @@ class TwoFactorAuthentication : AppCompatActivity() {
             binding.PosljiButton.isEnabled = false
 
 
-
         }
 
-        binding.GoToMainButton.setOnClickListener(){
-            if(zaznanoIme == USERNAME){
+        binding.GoToMainButton.setOnClickListener() {
+            if (zaznanoIme == USERNAME) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-            }
-            else{
+            } else {
                 binding.testniText.text = "Sistem je zaznal napačno osebo!"
             }
         }
-
-
 
 
 /*
@@ -240,7 +232,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun dispatchTakePictureIntent() : Uri{
+    fun dispatchTakePictureIntent(): Uri {
         println("Pride not")
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             println("ENA")
@@ -354,7 +346,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     var respondeBody = response.body!!.string()
 
-                    println("RESPONSE "+respondeBody)
+                    println("RESPONSE " + respondeBody)
 
                     println("Konec")
 
@@ -405,7 +397,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     //var respondeBody = JSONObject(response.body!!.string())
                     var pythonRes = response.body!!.string()
 
-                    println("/////RESPONSE-----------------> "+pythonRes)
+                    println("/////RESPONSE-----------------> " + pythonRes)
 
                     //val responseIme = respondeBody.getString("ime")
                     if (pythonRes == "ERROR_no_face_detected") {
@@ -413,9 +405,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
                             binding.odgovor.text = "Prosim, poskusite znova."
                         })
                         //throw IOException("Unexpected code $response")
-                    }
-                    else{
-                        zaznanoIme =  pythonRes.substring(15, USERNAME.length+15)
+                    } else {
+                        zaznanoIme = pythonRes.substring(15, USERNAME.length + 15)
                         println("Vrnjeno ime = $zaznanoIme")
 
 
@@ -431,10 +422,6 @@ class TwoFactorAuthentication : AppCompatActivity() {
             }
         })
     }
-
-
-
-
 
 
 }

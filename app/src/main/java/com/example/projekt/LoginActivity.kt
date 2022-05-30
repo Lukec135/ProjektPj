@@ -47,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-
         binding.sendButton.setOnClickListener() {
             LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false)
             if (!username.isEmpty() || !password.isEmpty()) {
@@ -67,7 +66,8 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this, TwoFactorAuthentication::class.java)
                 startActivity(intent)
             } else {
-                binding.EroorMessageView.text = "NAPAČNO UPORABNIŠKO IME ALI GESLO!"
+                binding.EroorMessageView.text =
+                    "PRIŠLO JE DO NAPAKE:\n-NAPAKA NA STREŽNIKU ALI POVEZAVI\n-NAPAČNO UPORABNIŠKO IME ALI GESLO!"
             }
             sporocilo = "false"
 
