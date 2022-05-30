@@ -73,14 +73,12 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     binding.odgovor.text = "Prosim, počakajte na odgovor strežnika."
 
-                    /*
                     postSlike(
                         "https://silent-eye-350012.oa.r.appspot.com/images/dodajAPI", "{\n" +
                                 "\"ime\": \"${USERNAME}\",\n" +
                                 "\"slika\": \"${slikaBase64}\"\n" +
                                 "}"
                     )
-*/
                 }
             }
 
