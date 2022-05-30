@@ -21,8 +21,8 @@ object LoadingScreen {
         dialog!!.setContentView(R.layout.layout_loading_screen)
         dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCancelable(cancelable)
-        val textView = dialog!!.findViewById<TextView>(R.id.text)
-        textView.text = text
+        /*val textView = dialog!!.findViewById<TextView>(R.id.text)
+        textView.text = text*/
         val SPLASH_TIME_OUT = 4000
         try {
 

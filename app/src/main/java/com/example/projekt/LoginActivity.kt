@@ -7,6 +7,8 @@ import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -60,15 +62,20 @@ class LoginActivity : AppCompatActivity() {
                 //println("To je username2:"+username.toString())
                 USERNAME = username.toString()
             }
-            Thread.sleep(2500)
-            if (sporocilo == "true") {
-                //ODPERI MAIN
-                val intent = Intent(this, TwoFactorAuthentication::class.java)
-                startActivity(intent)
-            } else {
-                binding.EroorMessageView.text =
-                    "PRIŠLO JE DO NAPAKE:\n-NAPAKA NA STREŽNIKU ALI POVEZAVI\n-NAPAČNO UPORABNIŠKO IME ALI GESLO!"
-            }
+            //Thread.sleep(2500)
+            Handler(Looper.myLooper()!!).postDelayed({
+
+                if (sporocilo == "true") {
+                    //ODPERI MAIN
+                    val intent = Intent(this, TwoFactorAuthentication::class.java)
+                    startActivity(intent)
+                } else {
+                    binding.EroorMessageView.text =
+                        "PRIŠLO JE DO NAPAKE:\n-NAPAKA NA STREŽNIKU ALI POVEZAVI\n-NAPAČNO UPORABNIŠKO IME ALI GESLO!"
+                }
+
+            },3000)
+
             sporocilo = "false"
 
             /*  LoadingScreen.hideLoading()
