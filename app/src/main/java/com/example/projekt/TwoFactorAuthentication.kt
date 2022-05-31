@@ -5,9 +5,7 @@ import android.R.attr.visible
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.util.Base64.encodeToString
 import android.view.View
@@ -17,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.example.projekt.databinding.ActivityTwoFactorAuthenticationBinding
+
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -64,6 +63,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     val data: Intent? = result.data
                     var slika: Uri = "${data?.data.toString()}".toUri()
 
+
                     val slikaBase64 = getBase64ForUriAndPossiblyCrash(slika)
 
                     println("URI:" + slika)
@@ -81,6 +81,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                                 "\"slika\": \"${slikaBase64}\"\n" +
                                 "}"
                     )
+                    LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false, 300000)
                 }
             }
 
@@ -130,6 +131,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     )
 
                 }
+
             }
 
         //binding.testniText.text = "TO JE IME"+USERNAME+",\n"+ USERID
@@ -168,8 +170,13 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
 
             uriOfImage = dispatchTakePictureIntent()
+            Handler(Looper.myLooper()!!).postDelayed({
 
-            binding.PosljiButton.visibility = View.VISIBLE
+                binding.PosljiButton.visibility = View.VISIBLE
+                binding.odgovor.text = ""
+                binding.testniText.text = ""
+            }, 1000)
+
 
         }
 
@@ -182,6 +189,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
             binding.odgovor.text = "Prosim, počakajte na odgovor strežnika."
 
+
+            LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false, 300000)
             postSlikePython(
                 "https://helloworld-43fq37x3bq-ew.a.run.app/preveri", "{\n" +
                         "\"ime\": \"${USERNAME}\",\n" +
@@ -190,8 +199,6 @@ class TwoFactorAuthentication : AppCompatActivity() {
             )
 
             binding.PosljiButton.isEnabled = false
-
-
 
 
         }
@@ -327,6 +334,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 println("NAPAKA")
                 runOnUiThread(Runnable {                                //Kot neki dispatcher
                     binding.odgovor.text = "Prosim, poskusite znova."
+                    LoadingScreen.hideLoading()
                 })
                 e.printStackTrace()
                 println("Konec Erorja")
@@ -340,6 +348,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                         println("NAPAKA2")
                         runOnUiThread(Runnable {                                //Kot neki dispatcher
                             binding.odgovor.text = "Prosim, poskusite znova."
+                            LoadingScreen.hideLoading()
                         })
                         throw IOException("Unexpected code $response")
                     }
@@ -356,11 +365,13 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
                     runOnUiThread(Runnable {                                //Kot neki dispatcher
                         binding.odgovor.text = "Strežnik je končal obdelavo."
+                        LoadingScreen.hideLoading()
                     })
 
                 }
             }
         })
+        LoadingScreen.hideLoading()
     }
 
     @Throws(IOException::class)
@@ -377,6 +388,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                 println("NAPAKA")
                 runOnUiThread(Runnable {//Kot neki dispatcher
                     binding.odgovor.text = "Prosim, poskusite znova."
+                    LoadingScreen.hideLoading()
                 })
                 e.printStackTrace()
                 println("Konec Erorja")
@@ -390,6 +402,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                         println("NAPAKA ------> response not successful")
                         runOnUiThread(Runnable {//Kot neki dispatcher
                             binding.odgovor.text = "Prosim, poskusite znova."
+                            LoadingScreen.hideLoading()
                         })
                         throw IOException("Unexpected code $response")
                     }
@@ -407,12 +420,15 @@ class TwoFactorAuthentication : AppCompatActivity() {
                     if (pythonRes == "ERROR_no_face_detected") {
                         runOnUiThread(Runnable {
                             binding.odgovor.text = "Prosim, poskusite znova."
+                            LoadingScreen.hideLoading()
+                            //
                         })
                         //throw IOException("Unexpected code $response")
+
                     } else {
                         zaznanoIme = pythonRes.substring(15, USERNAME.length + 15)
                         println("Vrnjeno ime = $zaznanoIme")
-
+                        LoadingScreen.hideLoading()
 
 
                         println("Konec")
@@ -421,11 +437,15 @@ class TwoFactorAuthentication : AppCompatActivity() {
                             binding.odgovor.text = "Strežnik je končal obdelavo."
                             binding.GoToMainButton.isEnabled = true
                             binding.GoToMainButton.visibility = View.VISIBLE
+                            LoadingScreen.hideLoading()
+
                         })
+
                     }
                 }
             }
         })
+        LoadingScreen.hideLoading()
     }
 
 

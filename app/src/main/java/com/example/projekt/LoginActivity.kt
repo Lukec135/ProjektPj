@@ -1,33 +1,38 @@
 package com.example.projekt
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.Image
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.example.projekt.databinding.ActivityLoginBinding
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.System.out
-import java.util.*
+
 
 var USERID: String = ""  //Globalna spremenljivka ki jo lahko uporabljamo v vseh datotekah.
 var USERNAME: String = "null"
 
 class LoginActivity : AppCompatActivity() {
+
+
+    private fun test() {
+        runOnUiThread {
+            if (sporocilo == "true") {
+                //ODPERI MAIN
+                val intent = Intent(this, TwoFactorAuthentication::class.java)
+                startActivity(intent)
+            } else {
+                binding.EroorMessageView.text =
+                    "PRIŠLO JE DO NAPAKE:\n-NAPAKA NA STREŽNIKU ALI POVEZAVI\n-NAPAČNO UPORABNIŠKO IME ALI GESLO!"
+            }
+        }
+    }
 
     private var sporocilo: String = "false"
     private lateinit var binding: ActivityLoginBinding
@@ -48,10 +53,9 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-
         binding.sendButton.setOnClickListener() {
-            LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false)
-            if (!username.isEmpty() || !password.isEmpty()) {
+            LoadingScreen.displayLoadingWithText(this, "PRIJAVLJANJE...", false, 60000)
+            if (!username.isEmpty() || !password.isEmpty() || username.isBlank() || password.isBlank()) {
                 post(
                     "https://silent-eye-350012.oa.r.appspot.com/users/loginAPI", "{\n" +
                             "\"username\": \"${username}\",\n" +
@@ -63,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
                 USERNAME = username.toString()
             }
             //Thread.sleep(2500)
-            Handler(Looper.myLooper()!!).postDelayed({
+            /*Handler(Looper.myLooper()!!).postDelayed({
 
                 if (sporocilo == "true") {
                     //ODPERI MAIN
@@ -75,12 +79,9 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             },3000)
-
+*/
             sporocilo = "false"
 
-            /*  LoadingScreen.hideLoading()
-              Thread.sleep(3000)
-              LoadingScreen.displayLoadingWithText(this,"Prijavljanje...",false)*/
         }
     }
 
@@ -104,6 +105,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (!response.isSuccessful) {
+                        LoadingScreen.hideLoading()
                         println("NAPAKA2")
                         throw IOException("Unexpected code $response")
                     }
@@ -121,14 +123,17 @@ class LoginActivity : AppCompatActivity() {
                     if (sporocilo == "true") {
                         USERID = respondeBody.getString("userId")
                     }
-
+                    test()
                     println("Dobimo1:" + sporocilo)
+                    LoadingScreen.hideLoading()
                     println("Dobimo2:" + USERID)
 
                     //val tokenInBase64 = respondeBody.getString("data")
 
                     println("TEST2")
+
                 }
+                LoadingScreen.hideLoading()
             }
         })
 

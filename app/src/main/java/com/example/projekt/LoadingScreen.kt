@@ -14,7 +14,8 @@ object LoadingScreen {
     fun displayLoadingWithText(
         context: Context?,
         text: String?,
-        cancelable: Boolean
+        cancelable: Boolean,
+        SPLASH_TIME_OUT: Long
     ) { // function -- context(parent (reference))
         dialog = Dialog(context!!)
         dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -23,7 +24,7 @@ object LoadingScreen {
         dialog!!.setCancelable(cancelable)
         /*val textView = dialog!!.findViewById<TextView>(R.id.text)
         textView.text = text*/
-        val SPLASH_TIME_OUT = 4000
+        //val SPLASH_TIME_OUT = 4000
         try {
 
             dialog!!.show()
@@ -35,6 +36,7 @@ object LoadingScreen {
         } catch (e: Exception) {
         }
     }
+
 
     fun hideLoading() {
         try {

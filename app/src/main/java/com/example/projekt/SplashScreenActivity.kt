@@ -8,16 +8,19 @@ import android.os.Looper
 import android.view.WindowManager
 
 class SplashScreenActivity : AppCompatActivity() {
-    private var splash:Long=3000
+    private var splash: Long = 3000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
         setContentView(R.layout.activity_splash_screen)
 
         Handler(Looper.myLooper()!!).postDelayed({
 
-                 startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
-        },splash)
+        }, splash)
     }
 }
