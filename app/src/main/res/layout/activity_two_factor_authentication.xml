@@ -58,6 +58,7 @@
         android:enabled="false"
         android:text="2. Pošlji narejeno sliko"
         android:textColor="@color/white"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/OdperiSlikoButton" />
@@ -70,6 +71,7 @@
         android:enabled="false"
         android:text="3. Vstopi v sistem (prejet odgovor)"
         android:textColor="@color/white"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PosljiButton" />

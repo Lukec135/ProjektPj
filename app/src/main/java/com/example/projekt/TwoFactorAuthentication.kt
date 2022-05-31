@@ -1,6 +1,7 @@
 package com.example.projekt
 
 import android.R.attr.bitmap
+import android.R.attr.visible
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64.encodeToString
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -167,6 +169,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
 
             uriOfImage = dispatchTakePictureIntent()
 
+            binding.PosljiButton.visibility = View.VISIBLE
+
         }
 
         binding.PosljiButton.setOnClickListener() {
@@ -186,6 +190,8 @@ class TwoFactorAuthentication : AppCompatActivity() {
             )
 
             binding.PosljiButton.isEnabled = false
+
+
 
 
         }
@@ -414,6 +420,7 @@ class TwoFactorAuthentication : AppCompatActivity() {
                         runOnUiThread(Runnable {                                //Kot neki dispatcher
                             binding.odgovor.text = "Strežnik je končal obdelavo."
                             binding.GoToMainButton.isEnabled = true
+                            binding.GoToMainButton.visibility = View.VISIBLE
                         })
                     }
                 }
