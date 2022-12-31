@@ -149,6 +149,11 @@ class MainActivity : AppCompatActivity() {
         )
 
 
+        binding.showObvestila.setOnClickListener {
+            val intent = Intent(this, ObvestilaActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 

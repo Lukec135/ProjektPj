@@ -8,6 +8,21 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/showObvestila"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/Obvestila"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="#00afc3 "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showPaketnik" />
+
+    <Button
         android:id="@+id/ShowQr"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="250dp"

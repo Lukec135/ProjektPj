@@ -57,6 +57,12 @@ class TwoFactorAuthentication : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        //DEBUGING
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+
+
+
         val getDataDodajOsebo =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
